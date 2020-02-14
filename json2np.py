@@ -14,7 +14,7 @@ for split in ['training', 'evaluation']:
     for training_file_name in glob.glob('{}/*.json'.format(split)):
         with open(training_file_name) as f:
             task = json.load(f)
-        task_np = np.zeros((2, 2, 10, 30, 30))
+        task_np = np.zeros((2, 2, 10, 30, 30), dtype=np.uint8)
         for i, problem in enumerate(task['train']):
             input = pad_to(np.array(problem['input'], dtype=np.uint8), (30, 30))
             output = pad_to(np.array(problem['output'], dtype=np.uint8), (30, 30))
@@ -26,6 +26,6 @@ for split in ['training', 'evaluation']:
             task_np[1, 0, i] = input
             task_np[1, 1, i] = output
         tasks.append(task_np)
-    data[split] = np.array(tasks)
+    data[split] = np.array(tasks, dtype=np.uint8)
 
 np.savez_compressed("arc.npz", **data)
